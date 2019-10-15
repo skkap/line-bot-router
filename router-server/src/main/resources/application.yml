@@ -1,0 +1,16 @@
+armeria:
+  health-check-path: /monitor/l7check
+  ports:
+    - port: 8080
+      protocol: HTTP
+server:
+  port: -1
+
+bot-router:
+  channel-secret: xxxxx
+  channel-access-token: xxxxx
+  downstreams:
+   - name: bot-name
+     uri: https://bot-host.com/callback
+   - name: another-bot-name
+     uri: https://bot-host-two.com/callback

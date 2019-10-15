@@ -1,0 +1,19 @@
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply plugin: 'org.jetbrains.kotlin.plugin.allopen'
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    implementation 'com.linecorp.armeria:armeria'
+    implementation 'com.linecorp.armeria:armeria-spring-boot-autoconfigure'
+
+    implementation 'com.linecorp.bot:line-bot-api-client'
+    implementation 'com.linecorp.bot:line-bot-model'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'javax.inject:javax.inject'
+    implementation 'io.github.microutils:kotlin-logging'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+}

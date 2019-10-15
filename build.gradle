@@ -1,0 +1,95 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${project.property('kotlin.version')}"
+        classpath 'io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE'
+        classpath "org.jetbrains.kotlin:kotlin-allopen:${project.property('kotlin.version')}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${project.property('kotlin.version')}"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:${project.property('kotlin.version')}"
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.7.RELEASE'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    group 'com.skkap.linebotrouter'
+
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'io.spring.dependency-management'
+
+    tasks.withType(KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_1_8
+        }
+    }
+
+    dependencyManagement {
+        def versionOf = { project.property("${it}.version") }
+
+        imports {
+            mavenBom 'io.spring.platform:platform-bom:Brussels-SR5'
+        }
+
+        dependencies {
+            dependency 'com.linecorp.bot:line-bot-api-client:3.0.0'
+            dependency 'com.linecorp.bot:line-bot-model:3.0.0'
+
+            dependencySet(group: 'com.linecorp.armeria', version: '0.89.0') {
+                entry 'armeria'
+                entry 'armeria-spring-boot-autoconfigure'
+            }
+
+            dependencySet(group: 'org.jetbrains.kotlin', version: versionOf('kotlin')) {
+                entry 'kotlin-reflect'
+                entry 'kotlin-stdlib-jdk8'
+            }
+            dependency 'io.github.microutils:kotlin-logging:1.7.6'
+
+            dependency 'io.reactivex.rxjava2:rxjava:2.2.11'
+
+            dependency 'org.assertj:assertj-core:3.13.2'
+            dependency 'org.mockito:mockito-core:3.0.0'
+            dependency 'org.mockito:mockito-junit-jupiter:3.0.0'
+            dependency 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
+
+            dependencySet(group: 'org.junit.jupiter', version: versionOf('junit5')) {
+                entry 'junit-jupiter-api'
+                entry 'junit-jupiter-engine'
+                entry 'junit-jupiter-params'
+            }
+            dependency "org.junit.vintage:junit-vintage-engine:${versionOf('junit5')}"
+            dependencySet(group: 'org.junit.platform', version: '1.5.1') {
+                entry 'junit-platform-commons'
+                entry 'junit-platform-engine'
+            }
+
+            dependency 'com.fasterxml.jackson.module:jackson-module-kotline:2.9.7'
+        }
+    }
+
+    // Dependencies enabled for all projects
+    dependencies {
+        compileOnly 'org.springframework.boot:spring-boot-configuration-processor'
+
+        testImplementation 'org.assertj:assertj-core'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api'
+        testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+        testImplementation 'org.junit.jupiter:junit-jupiter-params'
+        testImplementation 'org.junit.platform:junit-platform-commons'
+        testImplementation 'org.junit.platform:junit-platform-engine'
+        testImplementation 'org.junit.vintage:junit-vintage-engine'
+        testImplementation 'org.mockito:mockito-junit-jupiter'
+
+        testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin'
+    }
+}
